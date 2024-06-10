@@ -180,8 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Funkcja do inicjacji mapy Google
 function initMap() {
-    console.log("initMap called"); // Debugowanie
-    const salonLocation = { lat: 52.2296756, lng: 21.0122287 };
+    const salonLocation = { lat: 52.2296756, lng: 21.0122287 }; // Przykładowe współrzędne (Warszawa)
     const map = new google.maps.Map(document.getElementById('map'), {
         zoom: 15,
         center: salonLocation

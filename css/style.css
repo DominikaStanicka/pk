@@ -33,6 +33,7 @@ header h1 {
 nav ul {
     list-style-type: none;
     padding: 0;
+    margin-top: 1rem;
 }
 
 nav ul li {
@@ -40,16 +41,23 @@ nav ul li {
     margin: 0 1rem;
 }
 
-nav ul li a {
+.nav-button {
+    background-color: #444;
     color: #fff;
-    text-decoration: none;
+    border: 2px solid transparent;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
     font-weight: bold;
-    transition: color 0.3s;
+    border-radius: 4px;
+    transition: background-color 0.3s, border-color 0.3s;
+    cursor: pointer;
 }
 
-nav ul li a:hover,
-nav ul li a.active {
-    color: #ddd;
+.nav-button:hover,
+.nav-button.active {
+    background-color: #fff;
+    color: #444;
+    border-color: #444;
 }
 
 /* Stylizacja sekcji hero */
