@@ -46,22 +46,37 @@ document.addEventListener("DOMContentLoaded", function () {
         return `
             <section class="hero">
                 <h2>Zapraszamy do naszego salonu</h2>
-                <p>— Sebastian Curyło</p>
+                <p>— Bożena Stanicka</p>
             </section>
-            <section class="images">
-                <div class="image-container">
-                    <img src="images/image1.jpg" alt="Fryzjer przy pracy">
-                    <img src="images/image2.jpg" alt="Fryzjer przy pracy">
+            <section id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Witamy w naszym salonie fryzjerskim!">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h3>Witamy w naszym salonie fryzjerskim!</h3>
+                            
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Fryzjer przy pracy">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>Kompleksowa pielęgnacja włosów</h5>
+                            <p>Oferujemy profesjonalne usługi fryzjerskie dla każdego</p>
+                        </div>
+                    </div>
                 </div>
-            </section>
-            <section class="intro">
-                <p>Już wkrótce możesz odwiedzić nasz salon fryzjerski, zasiąść wygodnie w fotelu oraz zrelaksować się w miłej atmosferze, a my w tym czasie kompleksowo zadbamy zarówno o Twoje włosy, jak i doskonałe samopoczucie! Fryzjer Rzeszów Curyło jest tym, czego potrzebujesz Ty i Twoje włosy!</p>
-                <a href="#" class="button">Dowiedz się więcej</a>
-            </section>
-            <section>
-                <h2>Witamy w naszym salonie fryzjerskim!</h2>
-                <p>Oferujemy profesjonalne usługi fryzjerskie dla każdego. Zapraszamy!</p>
-            </section>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
         `;
     }
 
