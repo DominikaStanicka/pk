@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
         switch (id) {
             case "galeria":
                 tresc += pokazGalerie();
+                content.innerHTML = tresc;
                 break;
             case "kontakt":
                 tresc += pokazKontakt();
@@ -28,22 +29,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 return; // zakończ funkcję, ponieważ treść już została ustawiona
             case "praktyki":
                 tresc += pokazPraktyki();
+                content.innerHTML = tresc;
                 break;
             case "wyslanyformularz":
                 tresc += pokazWyslanyFormularz();
                 content.innerHTML = tresc;
                 break;
             default:
-                tresc += pokazHome();
+                pokazHome();
         }
-        content.innerHTML = tresc;
         if(localStorage.getItem("formSubmitted") === 'true' && id === "praktyki") {
             pokazWyslanyFormularz();
         }
     }
 
     function pokazHome() {
-        return `
+        let tresc = `
             <section class="hero">
                 <h2>Zapraszamy do naszego salonu</h2>
                 <p>— Bożena Stanicka</p>
@@ -77,7 +78,83 @@ document.addEventListener("DOMContentLoaded", function () {
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="sr-only">Next</span>
                 </a>
+            </section>
+        <div class="cwrap">
+        <div class="carousel-container">
+            <div id="image-track" data-mouse-down-at="0" data-prev-percentage="0">
+                <img class="image" src="https://images.unsplash.com/photo-1560869713-7d0a29430803?q=80&w=2126&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" draggable="false"/>
+                <img class="image" src="https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?q=80&w=1911&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" draggable="false"/>
+                <img class="image" src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" draggable="false"/>
+                <img class="image" src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" draggable="false"/>
+                <img class="image" src="https://images.unsplash.com/photo-1712337646541-d0c6f85447f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDE2fGJvOGpRS1RhRTBZfHxlbnwwfHx8fHw%3D" draggable="false"/>
+                <img class="image" src="https://images.unsplash.com/photo-1707343844152-6d33a0bb32c3?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" draggable="false"/>
+                <img class="image" src="https://images.unsplash.com/photo-1565867254334-10280784ff69?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDI1fGJvOGpRS1RhRTBZfHxlbnwwfHx8fHw%3D" draggable="false"/>
+            </div>
+        </div>
+        </div>
+        
         `;
+
+        content.innerHTML = tresc;
+
+        const track = document.getElementById("image-track");
+        
+        let mouseDownAt = 0;
+let prevPercentage = 0;
+
+const handleOnDown = e => {
+  mouseDownAt = e.clientX;
+}
+
+const handleOnUp = () => {
+  mouseDownAt = 0;
+  prevPercentage = parseFloat(track.style.transform.split("(")[1].split("%")[0]);
+}
+
+const handleOnMove = e => {
+  if(mouseDownAt === 0) return;
+
+  const mouseDelta = mouseDownAt - e.clientX ;
+  const maxDelta = window.innerWidth / 2;
+
+  const percentage = (mouseDelta / maxDelta) * -2;
+  const nextPercentageUnconstrained = prevPercentage + percentage;
+  const nextPercentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
+
+  prevPercentage = nextPercentage;
+
+  track.style.transform = `translate(${nextPercentage}%, -50%)`;
+
+  for(const image of track.getElementsByClassName("image")) {
+    image.style.objectPosition = `${100 + nextPercentage}% center`;
+  }
+}
+
+
+
+/* -- Add touch event listeners -- */
+
+window.onmousedown = e => {
+  handleOnDown(e);
+};
+window.ontouchstart = e => {
+  handleOnDown(e.touches[0]);
+};
+
+window.onmouseup = e => {
+  handleOnUp(e);
+};
+window.ontouchend = e => {
+  handleOnUp(e.touches[0]);
+};
+
+window.onmousemove = e => {
+  handleOnMove(e);
+};
+window.ontouchmove = e => {
+  handleOnMove(e.touches[0]);
+};
+
     }
 
     function pokazGalerie() {
@@ -86,21 +163,44 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(images => {
                 let galleryHTML = `
                     <h2><br />Galeria</h2>
-                    <div class="galeria">
+                    <div class="gallery">
                 `;
     
                 images.forEach(image => {
-                    console.log(image.src, image.alt);
                     galleryHTML += `
-                        <div class="slajd"><img src="${image.src}" alt="${image.alt}" /></div>
+                        <a href="#lightbox"><img src="${image.src}" alt="${image.alt}" data-large="${image.src}" /></a>
                     `;
                 });
     
-                galleryHTML += `</div>`;
+                galleryHTML += `</div>
+                    <div id="lightbox" class="lightbox">
+                        <img src="" alt="" />
+                    </div>`;
     
                 document.getElementById('content').innerHTML = galleryHTML;
+    
+                const gallery = document.querySelector('.gallery'); 
+                const galleryImages = document.querySelectorAll('.gallery img');
+                const lightbox = document.querySelector('.lightbox');
+                const lightboxImg = lightbox.querySelector('img');
+    
+                galleryImages.forEach(img => {
+                    img.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        lightboxImg.src = this.getAttribute('data-large');
+                        lightbox.style.display = 'flex';
+                    });
+                });
+    
+                lightbox.addEventListener('click', function () {
+                    lightbox.style.display = 'none';
+                });
+    
+                // Dodanie klasy do galerii, aby wyśrodkować ją za pomocą CSS
+                gallery.classList.add('centered');
             });
     }
+    
     
     
 
@@ -117,61 +217,71 @@ document.addEventListener("DOMContentLoaded", function () {
     function pokazPraktyki() {
         return `
             <h2>Formularz Praktyki Zawodowej</h2>
-            <form id="praktyki-form">
-                <label for="name">Imię i nazwisko:</label><br>
-                <input type="text" id="name" name="name" size="30" required><br>
-                <span id="nazw_error" class="czerwone"></span><br>
-                
-                <label for="email">Email:</label><br>
-                <input type="email" id="email" name="email" size="30" required><br>
-                <span id="email_error" class="czerwone"></span><br>
-                
-                <label for="phone">Telefon:</label><br>
-                <input type="tel" id="phone" name="phone" size="30" required><br>
-                <span id="phone_error" class="czerwone"></span><br>
-                
-                <label for="school">Szkoła:</label><br>
-                <input type="text" id="school" name="school" size="30" required><br>
-                <span id="school_error" class="czerwone"></span><br>
-                
-                <label for="year">Rok nauki:</label><br>
-                <select id="year" name="year" required>
-                    <option value="">Wybierz rok</option>
-                    <option value="1">1 rok</option>
-                    <option value="2">2 rok</option>
-                    <option value="3">3 rok</option>
-                    <option value="4">4 rok</option>
-                </select><br>
-                <span id="year_error" class="czerwone"></span><br>
-                
-                <label for="why">Dlaczego chcesz u nas praktykować?</label><br>
-                <textarea id="why" name="why" rows="4" required></textarea><br>
-                <span id="why_error" class="czerwone"></span><br>
-                
-                <fieldset>
-                    <legend>Preferowane dni praktyk:</legend>
-                    <input type="checkbox" id="monday" name="days" value="Monday">
-                    <label for="monday">Poniedziałek</label><br>
-                    <!-- Kontynuuj dodawanie pól checkbox -->
-                </fieldset>
-                
-                <fieldset>
-                    <legend>Preferowane godziny:</legend>
-                    <input type="radio" id="morning" name="time" value="Morning" required>
-                    <label for="morning">Rano</label><br>
-                    <!-- Kontynuuj dodawanie pól radio -->
-                </fieldset>
-                
-                <input type="button" value=" Wyślij " id="submit-button" onclick="submitButton()">
-                <input type="reset" value=" Anuluj ">
-            </form>
-            <div id="formularz-wyslany" style="display: none;">
-                <h2>Formularz został wysłany</h2>
-                <div id="wyslane-dane"></div>
-                <button id="edit-button">Edytuj</button>
-            </div>
-            <div id=wyslanyformularz></div>
-        `;
+                <form id="praktyki-form">
+                    <label for="name">Imię i nazwisko:</label><br>
+                    <input type="text" id="name" name="name" size="30" required><br>
+                    <span id="nameError" class="czerwone"></span><br>
+                    
+                    <label for="email">Email:</label><br>
+                    <input type="email" id="email" name="email" size="30" required><br>
+                    <span id="emailError" class="czerwone"></span><br>
+                    
+                    <label for="phone">Telefon:</label><br>
+                    <input type="tel" id="phone" name="phone" size="9" required><br>
+                    <span id="phoneError" class="czerwone"></span><br>
+                    
+                    <label for="school">Szkoła:</label><br>
+                    <input type="text" id="school" name="school" size="30" required><br>
+                    <span id="schoolError" class="czerwone"></span><br>
+                    
+                    <label for="year">Rok nauki:</label><br>
+                    <select id="year" name="year" required>
+                        <option value="">Wybierz rok</option>
+                        <option value="1">1 rok</option>
+                        <option value="2">2 rok</option>
+                        <option value="3">3 rok</option>
+                        <option value="4">4 rok</option>
+                    </select><br>
+                    <span id="yearError" class="czerwone"></span><br>
+                    
+                    <label for="why">Dlaczego chcesz u nas praktykować?</label><br>
+                    <textarea id="why" name="why" rows="4" required></textarea><br>
+                    <span id="whyError" class="czerwone"></span><br>
+                    
+                    <fieldset>
+                        <legend>Preferowane dni praktyk:</legend>
+                        <input type="checkbox" id="monday" name="days" value="Monday">
+                        <label for="monday">Poniedziałek</label><br>
+                        <input type="checkbox" id="tuesday" name="days" value="Tuesday">
+                        <label for="tuesday">Wtorek</label><br>
+                        <input type="checkbox" id="wednesday" name="days" value="Wednesday">
+                        <label for="wednesday">Środa</label><br>
+                        <input type="checkbox" id="thursday" name="days" value="Thursday">
+                        <label for="thursday">Czwartek</label><br>
+                        <input type="checkbox" id="friday" name="days" value="Friday">
+                        <label for="friday">Piątek</label><br>
+                    </fieldset>
+                    <span id="daysError" class="czerwone"></span><br>
+
+                    <fieldset>
+                        <legend>Preferowane godziny:</legend>
+                        <input type="radio" id="morning" name="time" value="Morning" required>
+                        <label for="morning">Rano</label><br>
+                        <input type="radio" id="afternoon" name="time" value="Afternoon">
+                        <label for="afternoon">Po południu</label><br>
+                    </fieldset>
+                    <span id="timeError" class="czerwone"></span><br>
+                    
+                    <input type="button" value="Wyślij" id="submit-button" onclick="submitButton()">
+                    <input type="reset" value="Anuluj">
+                </form>
+                <div id="formularz-wyslany" style="display: none;">
+                    <h2>Formularz został wysłany</h2>
+                    <div id="wyslane-dane"></div>
+                    <button id="edit-button">Edytuj</button>
+                </div>
+                <div id="wyslanyformularz"></div>
+            `;
     }
 
     // // Załaduj domyślną zawartość

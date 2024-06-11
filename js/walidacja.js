@@ -18,12 +18,70 @@ function submitButton() {
     const days = Array.from(document.querySelectorAll('input[name="days"]:checked')).map(cb => cb.labels[0].innerText);
     const time = document.querySelector('input[name="time"]:checked');
 
+    // Usuwanie starych komunikatów błędów
+    document.querySelectorAll('.czerwone').forEach(el => el.style.display = 'none');
+
+    let hasError = false;
+
     // Sprawdzenie wymaganych pól
-    if (!name || !email || !phone || !school || !year || !why || !time) {
-        alert('Proszę wypełnić wszystkie wymagane pola.');
-        return;
+    if (!name) {
+        document.getElementById('nameError').innerText = 'Proszę wypełnić pole Imię.';
+        document.getElementById('nameError').style.display = 'inline';
+        hasError = true;
+    }
+    if (!email) {
+        document.getElementById('emailError').innerText = 'Proszę wypełnić pole Email.';
+        document.getElementById('emailError').style.display = 'inline';
+        hasError = true;
+    }
+    if (!phone) {
+        document.getElementById('phoneError').innerText = 'Proszę wypełnić pole Telefon.';
+        document.getElementById('phoneError').style.display = 'inline';
+        hasError = true;
+    }
+    if (!school) {
+        document.getElementById('schoolError').innerText = 'Proszę wypełnić pole Szkoła.';
+        document.getElementById('schoolError').style.display = 'inline';
+        hasError = true;
+    }
+    if (!year) {
+        document.getElementById('yearError').innerText = 'Proszę wypełnić pole Rok.';
+        document.getElementById('yearError').style.display = 'inline';
+        hasError = true;
+    }
+    if (!why) {
+        document.getElementById('whyError').innerText = 'Proszę wypełnić pole Dlaczego.';
+        document.getElementById('whyError').style.display = 'inline';
+        hasError = true;
+    }
+    if (!days.length) {
+        document.getElementById('daysError').innerText = 'Proszę wybrać przynajmniej jeden dzień.';
+        document.getElementById('daysError').style.display = 'inline';
+        hasError = true;
+    }
+    if (!time) {
+        document.getElementById('timeError').innerText = 'Proszę wybrać godzinę.';
+        document.getElementById('timeError').style.display = 'inline';
+        hasError = true;
     }
 
+    // Walidacja numeru telefonu
+    if (phone && !/^\d{9}$/.test(phone)) {
+        document.getElementById('phoneError').innerText = 'Numer telefonu powinien składać się z 9 cyfr.';
+        document.getElementById('phoneError').style.display = 'inline';
+        hasError = true;
+    }
+
+    // Walidacja adresu email
+    if (email && !/^\S+@\S+\.\S+$/.test(email)) {
+        document.getElementById('emailError').innerText = 'Proszę podać poprawny adres email.';
+        document.getElementById('emailError').style.display = 'inline';
+        hasError = true;
+    }
+
+    if (hasError) {
+        return;
+    }
     const formData = {
         name,
         email,
